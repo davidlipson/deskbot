@@ -16,8 +16,8 @@ export const toggleCurrentSong = async (req: SpotifyRequest, res: Response) => {
         },
       }
     );
-    res.send(`Spotify ${currentlyPlaying ? "paused" : "playing"}`);
+    res.send({ message: `Spotify ${currentlyPlaying ? "paused" : "playing"}` });
   } catch (error) {
-    console.error("Couldn't pause Spotify...", error);
+    res.status(500).send({ message: "Couldn't toggle Spotify playback" });
   }
 };

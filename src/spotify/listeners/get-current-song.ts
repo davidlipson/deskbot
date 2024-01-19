@@ -15,7 +15,7 @@ export const getCurrentSong = async (req: SpotifyRequest, res: Response) => {
       }
     );
     if (response.status !== 200 || !response.data?.item?.name) {
-      return res.send("No song currently playing");
+      return res.send({ message: "No song currently playing" });
     }
     const name = response.data.item.name;
     const artist = response.data.item.artists[0].name;
@@ -23,12 +23,16 @@ export const getCurrentSong = async (req: SpotifyRequest, res: Response) => {
     const is_playing = response.data.is_playing;
     const song = new Song(name, artist, progress_ms, is_playing);
     res.send({
-      details: song.details(),
-      progress: song.progressBar(),
-      is_playing: song.is_playing,
+      message: "Here's what's currently playing on Spotify",
+      song: {
+        details: song.details(),
+        progress: song.progressBar(),
+        is_playing: song.is_playing,
+      },
     });
   } catch (error) {
-    console.error(error);
-    res.status(500).send("Error fetching current song from Spotify");
+    res
+      .status(500)
+      .send({ message: "Error fetching current song from Spotify" });
   }
 };

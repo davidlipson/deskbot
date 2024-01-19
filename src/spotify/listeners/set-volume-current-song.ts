@@ -31,9 +31,8 @@ export const setVolumeCurrentSong = async (
       }
     );
 
-    res.send(`Volume: ${roundedVolume}%`);
+    res.send({ message: `Volume: ${roundedVolume}%` });
   } catch (error) {
-    console.error("Couldn't set Spotify volume...", error);
-    res.status(500).send("Couldn't set Spotify volume...");
+    res.status(500).send({ message: "Couldn't set Spotify volume..." });
   }
 };
