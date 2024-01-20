@@ -10,13 +10,16 @@ export class Event {
 
   details() {
     const options: Intl.DateTimeFormatOptions = {
-      hour: 'numeric',
-      minute: '2-digit',
-      hour12: true
+      hour: "numeric",
+      minute: "2-digit",
+      hour12: true,
     };
 
-    const startTimeString = this.start_time.toLocaleTimeString('en-US', options);
-    const endTimeString = this.end_time.toLocaleTimeString('en-US', options);
+    const startTimeString = this.start_time.toLocaleTimeString(
+      "en-US",
+      options
+    );
+    const endTimeString = this.end_time.toLocaleTimeString("en-US", options);
     return `${this.name} [${startTimeString} - ${endTimeString}]`;
   }
 }

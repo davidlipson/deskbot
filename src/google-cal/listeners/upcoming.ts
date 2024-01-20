@@ -1,6 +1,5 @@
 import { google } from "googleapis";
-import { OAuth2Client } from "google-auth-library";
-import { CalendarRequest } from "../CalendarRequest";
+import { CalendarRequest } from "../../types";
 import { Response } from "express";
 import { Event } from "../Event";
 
@@ -43,9 +42,7 @@ export const upcomingEvents = async (req: CalendarRequest, res: Response) => {
     if (events?.length) {
       res.send({
         message: "Here are your events for today!",
-        events: events.map((event) => ({
-          details: event.details(),
-        })),
+        events: events.map((event) => event.details()),
       });
     } else {
       res.send({ message: "No more events today!", events: [] });

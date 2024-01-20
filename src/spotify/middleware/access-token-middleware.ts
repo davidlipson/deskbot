@@ -1,6 +1,6 @@
-import { NextFunction, Request, Response } from "express";
+import { NextFunction, Response } from "express";
 import { refreshAccessToken } from "../auth";
-import { SpotifyRequest } from "../SpotifyRequest";
+import { SpotifyRequest } from "../../types";
 
 export const tokenMiddleware = async (
   req: SpotifyRequest,

@@ -1,6 +1,6 @@
 import axios from "axios";
 import { Response } from "express";
-import { SpotifyRequest } from "../SpotifyRequest";
+import { SpotifyRequest } from "../../types";
 
 export const toggleCurrentSong = async (req: SpotifyRequest, res: Response) => {
   try {

@@ -1,7 +1,6 @@
 import { NextFunction, Request, Response } from "express";
-import { CalendarRequest } from "../../types";
 import { OAuth2Client } from "google-auth-library";
-
+/*
 export const clientMiddleware = async (
   req: CalendarRequest,
   res: Response,
@@ -22,3 +21,4 @@ export const clientMiddleware = async (
     res.status(500).send("Error setting Oauth client");
   }
 };
+*/

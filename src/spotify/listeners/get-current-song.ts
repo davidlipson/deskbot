@@ -2,37 +2,18 @@ import axios from "axios";
 import { Request, Response } from "express";
 import { refreshAccessToken } from "../auth";
 import { Song } from "../Song";
-import { SpotifyRequest } from "../SpotifyRequest";
+import { SpotifyRequest } from "../../types";
 
 export const getCurrentSong = async (req: SpotifyRequest, res: Response) => {
   try {
-    const response = await axios.get(
-      "https://api.spotify.com/v1/me/player/currently-playing",
-      {
-        headers: {
-          Authorization: `Bearer ${req.spotifyAccessToken}`,
-        },
-      }
-    );
-    if (response.status !== 200 || !response.data?.item?.name) {
-      return res.send({ message: "No song currently playing" });
-    }
-    const name = response.data.item.name;
-    const artist = response.data.item.artists[0].name;
-    const progress_ms = response.data.progress_ms;
-    const is_playing = response.data.is_playing;
-    const song = new Song(name, artist, progress_ms, is_playing);
     res.send({
-      message: "Here's what's currently playing on Spotify",
-      song: {
-        details: song.details(),
-        progress: song.progressBar(),
-        is_playing: song.is_playing,
-      },
+      message: `${req.currentSong?.name} [${req.currentSong?.artist}]`,
+      progress: req.currentSong?.progress(),
+      is_playing: req.currentSong?.is_playing,
     });
   } catch (error) {
-    res
-      .status(500)
-      .send({ message: "Error fetching current song from Spotify" });
+    res.status(500).send({
+      message: "Error fetching current song from Spotify",
+    });
   }
 };

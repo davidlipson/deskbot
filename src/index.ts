@@ -2,6 +2,7 @@ import express, { Express, Request, Response } from "express";
 import dotenv from "dotenv";
 import spotify from "./spotify/router";
 import calendar from "./google-cal/router";
+import github from "./github/router";
 
 dotenv.config();
 
@@ -11,6 +12,7 @@ dotenv.config();
 
   app.use("/spotify", spotify);
   app.use("/calendar", calendar);
+  app.use("/github", github);
 
   app.listen(port, () => {
     console.log(`[server]: Server is running at http://localhost:${port}`);

@@ -1,13 +1,12 @@
 import axios from "axios";
 import { Response } from "express";
-import { SpotifyRequest } from "../SpotifyRequest";
+import { SpotifyRequest } from "../../types";
 
 export const setVolumeCurrentSong = async (
   req: SpotifyRequest,
   res: Response
 ) => {
   try {
-    console.log("test");
     const volume = Number(req.query.volume);
 
     if (!Number.isInteger(volume)) {
