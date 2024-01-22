@@ -3,7 +3,7 @@ import { notifications } from "./listeners";
 
 const router = express.Router();
 
-router.get("/notifications", notifications);
+router.get("/", notifications);
 router.get("/oauth/callback", (req, res) => {
   res.send("Hello World!");
 });

@@ -1,7 +1,7 @@
 import express, { Express, Request, Response } from "express";
 import dotenv from "dotenv";
 import spotify from "./spotify/router";
-import calendar from "./google-cal/router";
+import calendar from "./ calendar/router";
 import github from "./github/router";
 
 dotenv.config();
