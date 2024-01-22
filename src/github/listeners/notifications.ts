@@ -20,7 +20,9 @@ export const notifications = async (req: GithubRequest, res: Response) => {
       });
 
     const unreadNotifications = notifications.filter(
-      (notification) => notification?.unread
+      (notification) =>
+        notification?.unread &&
+        ["assign", "mention", "review_requested"].includes(notification.reason)
     );
 
     if (!unreadNotifications.length) {
