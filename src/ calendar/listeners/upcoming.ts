@@ -70,7 +70,6 @@ export const upcomingEvents = async (req: CalendarRequest, res: Response) => {
       )
     ).flatMap((response) => response.data.items);
 
-    console.log(allEvents);
     const events =
       allEvents
         .filter(

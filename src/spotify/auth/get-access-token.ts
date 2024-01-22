@@ -20,8 +20,5 @@ export const getAccessToken = async (code: string) => {
       },
     }
   );
-
-  console.log(data);
-
   return data;
 };
