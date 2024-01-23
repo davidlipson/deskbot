@@ -4,7 +4,7 @@ import { Event } from "../Event";
 
 import fs from "fs";
 import csv from "csv-parser";
-import moment from "moment";
+import moment from "moment-timezone";
 import { Response } from "express";
 
 interface GarbageRow {
@@ -24,10 +24,10 @@ export const garbage = async (): Promise<Event | undefined> => {
     results.push(data as GarbageRow);
   }
 
-  const tomorrow = moment().add(2, "days");
+  const tomorrow = moment().tz("America/Toronto").add(2, "days");
 
   const collection = results.find((item) => {
-    const collectionDate = moment(item.CollectionDate);
+    const collectionDate = moment.tz(item.CollectionDate, "America/Toronto");
     return collectionDate.isSame(tomorrow, "day");
   });
 
@@ -46,11 +46,8 @@ export const upcomingEvents = async (req: CalendarRequest, res: Response) => {
     // Initialize the Google Calendar service
     const calendar = google.calendar({ version: "v3", auth: req.client });
 
-    const now = new Date();
-    now.setHours(0, 0, 0, 0);
-
-    const endOfDay = new Date();
-    endOfDay.setHours(23, 59, 59, 999);
+    const now = moment().tz("America/Toronto").startOf("day");
+    const endOfDay = moment().tz("America/Toronto").endOf("day");
 
     const calendars = await calendar.calendarList.list();
     const ids = calendars.data.items?.map((item) => item.id) || [];
@@ -80,8 +77,12 @@ export const upcomingEvents = async (req: CalendarRequest, res: Response) => {
           (event) =>
             new Event(
               event?.summary?.trim() as string,
-              new Date(event?.start?.dateTime as string),
-              new Date(event?.end?.dateTime as string)
+              moment
+                .tz(event?.start?.dateTime as string, "America/Toronto")
+                .toDate(),
+              moment
+                .tz(event?.end?.dateTime as string, "America/Toronto")
+                .toDate()
             )
         ) || [];
 

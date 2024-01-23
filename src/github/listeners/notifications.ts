@@ -2,6 +2,7 @@ import { GithubRequest } from "../../types";
 import { Response } from "express";
 import { Octokit } from "@octokit/rest";
 import { Notification } from "../Notification";
+import moment from "moment-timezone";
 
 const HOURS_CHECKED = 6;
 
@@ -14,9 +15,10 @@ export const notifications = async (req: GithubRequest, res: Response) => {
     const { data: notifications } =
       await octokit.activity.listNotificationsForAuthenticatedUser({
         all: true,
-        since: new Date(
-          Date.now() - 1000 * 60 * 60 * HOURS_CHECKED
-        ).toISOString(),
+        since: moment()
+          .tz("America/Toronto")
+          .subtract(HOURS_CHECKED, "hours")
+          .toISOString(),
       });
 
     const unreadNotifications = notifications.filter(
