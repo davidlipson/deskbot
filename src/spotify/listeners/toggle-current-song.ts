@@ -1,8 +1,8 @@
 import axios from "axios";
 import { Response } from "express";
-import { SpotifyRequest } from "../../types";
+import { DeskbotRequest } from "../../types";
 
-export const toggleCurrentSong = async (req: SpotifyRequest, res: Response) => {
+export const toggleCurrentSong = async (req: DeskbotRequest, res: Response) => {
   try {
     const currentlyPlaying = req.currentSong?.is_playing;
     await axios.put(

@@ -1,11 +1,11 @@
 import { google } from "googleapis";
-import { CalendarRequest } from "../../types";
 import { Event } from "../Event";
 
 import fs from "fs";
 import csv from "csv-parser";
 import moment from "moment-timezone";
 import { Response } from "express";
+import { DeskbotRequest } from "../../types";
 
 interface GarbageRow {
   CollectionDate: string;
@@ -16,32 +16,7 @@ interface GarbageRow {
   [key: string]: string;
 }
 
-export const garbage = async (): Promise<Event | undefined> => {
-  const results: GarbageRow[] = [];
-  const stream = fs.createReadStream("garbage2024.csv").pipe(csv());
-
-  for await (const data of stream) {
-    results.push(data as GarbageRow);
-  }
-
-  const tomorrow = moment().tz("America/Toronto").add(2, "days");
-
-  const collection = results.find((item) => {
-    const collectionDate = moment.tz(item.CollectionDate, "America/Toronto");
-    return collectionDate.isSame(tomorrow, "day");
-  });
-
-  if (collection) {
-    const items = ["Garbage", "Recycling", "Organics", "YardWaste"].filter(
-      (item) => collection[item] === "T"
-    );
-    if (items.length > 0) {
-      return new Event(`${items.join(", ")}`);
-    }
-  }
-};
-
-export const upcomingEvents = async (req: CalendarRequest, res: Response) => {
+export const upcomingHelper = async (req: DeskbotRequest) => {
   try {
     // Initialize the Google Calendar service
     const calendar = google.calendar({ version: "v3", auth: req.client });
@@ -105,14 +80,45 @@ export const upcomingEvents = async (req: CalendarRequest, res: Response) => {
     });
 
     if (events?.length) {
-      res.send({
-        message: "Here are your events for today!",
+      return {
+        message: `${events.length} events today.`,
         events: events.map((event) => event.details()),
-      });
+      };
     } else {
-      res.send({ message: "No more events today!", events: [] });
+      return { message: "No events today!", events: [] };
     }
   } catch (error) {
-    res.status(500).send("Couldn't get Google Calendar events...");
+    console.log(error);
+    return { message: "Calendar Error.", events: [] };
   }
+};
+
+export const garbage = async (): Promise<Event | undefined> => {
+  const results: GarbageRow[] = [];
+  const stream = fs.createReadStream("garbage2024.csv").pipe(csv());
+
+  for await (const data of stream) {
+    results.push(data as GarbageRow);
+  }
+
+  const tomorrow = moment().tz("America/Toronto").add(2, "days");
+
+  const collection = results.find((item) => {
+    const collectionDate = moment.tz(item.CollectionDate, "America/Toronto");
+    return collectionDate.isSame(tomorrow, "day");
+  });
+
+  if (collection) {
+    const items = ["Garbage", "Recycling", "Organics", "YardWaste"].filter(
+      (item) => collection[item] === "T"
+    );
+    if (items.length > 0) {
+      return new Event(`${items.join(", ")}`);
+    }
+  }
+};
+
+export const upcomingEvents = async (req: DeskbotRequest, res: Response) => {
+  const result = await upcomingHelper(req);
+  res.send(result);
 };

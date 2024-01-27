@@ -1,3 +1,1 @@
-export * from "./CalendarRequest";
-export * from "./GithubRequest";
-export * from "./SpotifyRequest";
+export * from "./DeskbotRequest";

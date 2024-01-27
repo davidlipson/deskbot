@@ -1,9 +1,9 @@
 import { NextFunction, Request, Response } from "express";
-import { CalendarRequest } from "../../types";
 import { OAuth2Client } from "google-auth-library";
+import { DeskbotRequest } from "../../types";
 
 export const clientMiddleware = async (
-  req: CalendarRequest,
+  req: DeskbotRequest,
   res: Response,
   next: NextFunction
 ) => {

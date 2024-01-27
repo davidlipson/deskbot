@@ -1,4 +1,4 @@
-import { GithubRequest } from "../../types";
+import { DeskbotRequest } from "../../types";
 import { Response } from "express";
 import { Octokit } from "@octokit/rest";
 import { Notification } from "../Notification";
@@ -6,7 +6,7 @@ import moment from "moment-timezone";
 
 const HOURS_CHECKED = 6;
 
-export const notifications = async (req: GithubRequest, res: Response) => {
+export const notificationsHelper = async (req: DeskbotRequest) => {
   try {
     const octokit = new Octokit({
       auth: process.env.GITHUB_TOKEN,
@@ -28,10 +28,11 @@ export const notifications = async (req: GithubRequest, res: Response) => {
     );
 
     if (!unreadNotifications.length) {
-      return res.send({ message: "No new notifications!", notifications: [] });
+      return { message: "No GH msgs!", notifications: [] };
     }
-    res.json({
-      message: `${unreadNotifications.length} unread notifications on github.`,
+
+    return {
+      message: `${unreadNotifications.length} unread GH msgs.`,
       totalItems: unreadNotifications.length,
       items: unreadNotifications.map((notification) =>
         new Notification(
@@ -39,9 +40,13 @@ export const notifications = async (req: GithubRequest, res: Response) => {
           notification.subject.type
         ).details()
       ),
-    });
+    };
   } catch (error) {
-    console.error("Couldn't get github notifications...", error);
-    res.status(500).send("Couldn't get github notifications...");
+    return { message: "Github Error.", notifications: [] };
   }
+};
+
+export const notifications = async (req: DeskbotRequest, res: Response) => {
+  const result = await notificationsHelper(req);
+  res.send(result);
 };

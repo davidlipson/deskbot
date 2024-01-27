@@ -1,9 +1,9 @@
 import axios from "axios";
 import { Response } from "express";
-import { SpotifyRequest } from "../../types";
+import { DeskbotRequest } from "../../types";
 
 export const setVolumeCurrentSong = async (
-  req: SpotifyRequest,
+  req: DeskbotRequest,
   res: Response
 ) => {
   try {

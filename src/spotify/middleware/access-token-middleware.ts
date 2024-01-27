@@ -1,9 +1,9 @@
 import { NextFunction, Response } from "express";
 import { refreshAccessToken } from "../auth";
-import { SpotifyRequest } from "../../types";
+import { DeskbotRequest } from "../../types";
 
 export const tokenMiddleware = async (
-  req: SpotifyRequest,
+  req: DeskbotRequest,
   res: Response,
   next: NextFunction
 ) => {

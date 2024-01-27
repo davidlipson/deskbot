@@ -1,19 +1,29 @@
-import axios from "axios";
-import { Request, Response } from "express";
-import { refreshAccessToken } from "../auth";
-import { Song } from "../Song";
-import { SpotifyRequest } from "../../types";
+import { Response } from "express";
+import { DeskbotRequest } from "../../types";
 
-export const getCurrentSong = async (req: SpotifyRequest, res: Response) => {
+export const getCurrentSongHelper = (req: DeskbotRequest) => {
   try {
-    res.send({
-      message: `${req.currentSong?.name} [${req.currentSong?.artist}]`,
-      progress: req.currentSong?.progress(),
-      is_playing: req.currentSong?.is_playing,
-    });
+    if (req.currentSong) {
+      return {
+        message: `${req.currentSong?.name} [${req.currentSong?.artist}]`,
+        progress: req.currentSong?.progress(),
+        is_playing: req.currentSong?.is_playing,
+      };
+    }
+    return {
+      message: "No song is currently playing",
+      progress: 0,
+      is_playing: false,
+    };
   } catch (error) {
-    res.status(500).send({
-      message: "Error fetching current song from Spotify",
-    });
+    return {
+      message: "Spotify Error.",
+      progress: 0,
+      is_playing: false,
+    };
   }
+};
+
+export const getCurrentSong = async (req: DeskbotRequest, res: Response) => {
+  res.send(getCurrentSongHelper(req));
 };
