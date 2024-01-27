@@ -17,7 +17,7 @@ export const getCurrentSongHelper = (req: DeskbotRequest) => {
     };
   } catch (error) {
     return {
-      message: "Spotify Error.",
+      message: "Spotify Error",
       progress: 0,
       is_playing: false,
     };

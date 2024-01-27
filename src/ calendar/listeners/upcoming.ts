@@ -81,15 +81,15 @@ export const upcomingHelper = async (req: DeskbotRequest) => {
 
     if (events?.length) {
       return {
-        message: `${events.length} events today.`,
+        message: `${events.length} events today`,
         events: events.map((event) => event.details()),
       };
     } else {
-      return { message: "No events today!", events: [] };
+      return { message: "No events today", events: [] };
     }
   } catch (error) {
     console.log(error);
-    return { message: "Calendar Error.", events: [] };
+    return { message: "Calendar Error", events: [] };
   }
 };
 

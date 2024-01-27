@@ -28,11 +28,11 @@ export const notificationsHelper = async (req: DeskbotRequest) => {
     );
 
     if (!unreadNotifications.length) {
-      return { message: "No GH msgs!", notifications: [] };
+      return { message: "No GH msgs", notifications: [] };
     }
 
     return {
-      message: `${unreadNotifications.length} unread GH msgs.`,
+      message: `${unreadNotifications.length} unread GH msgs`,
       totalItems: unreadNotifications.length,
       items: unreadNotifications.map((notification) =>
         new Notification(
@@ -42,7 +42,7 @@ export const notificationsHelper = async (req: DeskbotRequest) => {
       ),
     };
   } catch (error) {
-    return { message: "Github Error.", notifications: [] };
+    return { message: "Github Error", notifications: [] };
   }
 };
 

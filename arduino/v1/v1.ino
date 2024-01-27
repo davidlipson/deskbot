@@ -47,13 +47,15 @@ DynamicJsonDocument* getRequest (const char* endpoint) {
 }
 
 void getStatus () {
-  DynamicJsonDocument* song = getRequest("/status");
-  if(song != nullptr){
-    JsonObject root = song->as<JsonObject>();
-    Serial.println(root["message"].as<String>());
+  DynamicJsonDocument* status = getRequest("/status");
+  if(status != nullptr){
+    JsonObject root = status->as<JsonObject>();
+    Serial.println(root["song"]["message"].as<String>());
+    Serial.println(root["calendar"]["message"].as<String>());
+    Serial.println(root["github"]["message"].as<String>());
   }
   else{
-    Serial.println("Error getting current song...");
+    Serial.println("Error getting current status...");
   }
 }
 
